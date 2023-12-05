@@ -2,19 +2,19 @@ const readline = require("readline-sync");
 
 let books = [
     {
-        name:"Believe In You",
-        price:199,
+        name:"Book1",
+        price:220,
         status:"available",
         quantity:5
     },
     {
-        name:"Run Machine",
+        name:"Book2",
         price:599,
         status:"available",
         quantity:7
     },
     {
-        name:"Peace Of Mind",
+        name:"Book3",
         price:299,
         status:"available",
         quantity:8
