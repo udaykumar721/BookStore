@@ -24,7 +24,6 @@ let books = [
     }]
 
 function displayBooks() {
-    let id = 0
     console.log(`\nAvailable Books:
 +------+--------------------+-------+----------+
 | ID   |        Name        | Price | Quantity |
@@ -78,30 +77,30 @@ function addBook(i,quant) {
     }
 }
 function removeFromCart(i){
-    c = cart.find((ele)=>ele.id==i)
-    b = books.find((ele)=>ele.id==i)
-    total-=c.total
-    b.quantity += c.quantity
+    removeCart = cart.find((ele)=>ele.id==i)
+    removeBook = books.find((ele)=>ele.id==i)
+    total-=removeCart.total
+    removeBook.quantity += removeCart.quantity
     cart=cart.filter((ele)=>ele.id!=i)
-    if (b.quantity>0){b.status="available"}
+    if (removeBook.quantity>0){removeBook.status="available"}
     console.log("Book Removed Successfully!!!");
 }
 function editDetailsInCart(i,q){
-    let uc = cart.find((ele)=>ele.id==i)
-    let ub = books.find((ele)=>ele.id==i)
-    if (uc.quantity<q) {
-        ub.quantity+=(uc.quantity-q)
+    let updateCart = cart.find((ele)=>ele.id==i)
+    let updateBook = books.find((ele)=>ele.id==i)
+    if (updateCart.quantity<q) {
+        updateBook.quantity+=(updateCart.quantity-q)
     } else {
-        ub.quantity+=(uc.quantity-q)
+        updateBook.quantity+=(updateCart.quantity-q)
     }
-    if (ub.quantity>0){ub.status="available"}
-    uc.quantity=q
+    if (updateBook.quantity>0){updateBook.status="available"}
+    updateCart.quantity=q
     console.log("\nCart is Updated Successfully!!");
 }
 
 function showCart() {
     if (cart.length == 0) {
-        console.log("Your Cart is Empty");
+        console.log("Your Cart is Empty!!!!");
     }else {
         console.log("\nCart:");
         console.log(`+----+-----------+-----------+-----------+-------+`);
@@ -112,8 +111,8 @@ function showCart() {
         });
         console.log(`+----+-----------+-----------+-----------+-------+`);
         console.log("Total Cart Price Is = $"+total);
-        let ch = readline.questionInt("\nEnter\n1:Remove Book from Cart\n2:Update Book Quantity\nPress Any Number Key For Continue:");
-        switch (ch) {
+        let choice2 = readline.questionInt("\nEnter\n1:Remove Book from Cart\n2:Update Book Quantity\nPress Any Number Key For Continue:");
+        switch (choice2) {
             case 1:
                 i=readline.questionInt("Enter Book ID To Remove Book: ")
                 removeFromCart(i)
