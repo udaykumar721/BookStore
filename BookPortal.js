@@ -111,7 +111,7 @@ function showCart() {
             console.log(`| ${ele.id}|    ${ele.name}  |    $${ele.price}    |     ${ele.quantity}     |  $${ele.total}  |`); 
         });
         console.log(`+----+-----------+-----------+-----------+-------+`);
-        console.log("Total Cart Price = $"+total);
+        console.log("Total Cart Price Is = $"+total);
         let ch = readline.questionInt("\nEnter\n1:Remove Book from Cart\n2:Update Book Quantity\nPress Any Number Key For Continue:");
         switch (ch) {
             case 1:
