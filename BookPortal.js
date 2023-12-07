@@ -25,30 +25,36 @@ let bookStore =[
 ]
 let unAvailableBooks =[]
 function displayBooks(){
-    if (unAvailableBooks.length != 0){
+    if (unAvailableBooks.length){
         console.log(`\nUnavailable Books:
 +------+--------------------+-------+----------+------------+
 | ID   |        Name        | Price | Quantity |   Status   |
 +------+--------------------+-------+----------+------------+`);
-for(let i =0 ; i <unAvailableBooks.length ;i++){
-    console.log(`| ${unAvailableBooks[i].id}  |        ${unAvailableBooks[i].name}       |  $${unAvailableBooks[i].price}  |     ${unAvailableBooks[i].quantity}   |   ${unAvailableBooks[i].status}|`  );    
-}
-console.log(`+------+--------------------+-------+----------+------------+`);
+bookStore.forEach(ele => {
+    if(ele.status == "unavailable"){
+        console.log(`| ${ele.id}  |        ${ele.name}       |  $${ele.price}  |     ${ele.quantity}    |  ${ele.status}`);
     }
+    
+});
+console.log(`+------+--------------------+-------+----------+------------+`);
+}
     console.log(`\nAvailable Books:
 +------+--------------------+-------+----------+------------+
 | ID   |        Name        | Price | Quantity |   Status   |
 +------+--------------------+-------+----------+------------+`);
-    for(let i =0 ; i <bookStore.length ;i++){
-        if(bookStore[i].status == "available"){
-            console.log(`| ${bookStore[i].id}  |        ${bookStore[i].name}       |  $${bookStore[i].price}  |     ${bookStore[i].quantity}   |   ${bookStore[i].status}|`  );
-        }    
-    }
+    bookStore.forEach(ele=>{ 
+        if(ele.status == "available"){
+
+            console.log(`| ${ele.id}  |        ${ele.name}       |  $${ele.price}  |     ${ele.quantity}    |  ${ele.status}`);
+        }
+
+    })
     console.log(`+------+--------------------+-------+----------+------------+`);
 }
 let cartItems = []
 let totalPrice = 0
 function addBookToCart(userId,userQuantity){
+    let flag = true
     bookObj = bookStore.find((ele)=>ele.id==userId)
     cartObj = cartItems.find((ele)=>ele.id==userId)
     if(userQuantity > bookObj.quantity){
@@ -58,21 +64,16 @@ function addBookToCart(userId,userQuantity){
         if(cartItems.length != 0){
             cartObj = cartItems.find((ele)=>ele.id==userId)
             for(let j = 0 ; j < cartItems.length ;j++){
-            if (cartItems[j].name == bookObj.name){
-                total = bookObj.price * userQuantity
-                bookObj.quantity -= userQuantity 
-                cartItems[j].quantity += userQuantity 
-            }else{
-                let name = bookObj.name
-                let price = bookObj.price
-                bookObj.quantity -= userQuantity
-                let total = price * userQuantity
-                cartItems.push({id:bookObj.id,name:name,price:price,quantity:userQuantity,price:price,total:total})
-                totalPrice += total
-            } 
+                if (cartItems[j].name == bookObj.name){
+                    total = bookObj.price * userQuantity
+                    bookObj.quantity -= userQuantity 
+                    cartItems[j].quantity += userQuantity
+                    flag = false
+                }
+             
+            }
         }
-    }
-        else{
+        if(flag){
             let name = bookObj.name
             let price = bookObj.price
             bookObj.quantity -= userQuantity
@@ -86,21 +87,19 @@ function addBookToCart(userId,userQuantity){
         bookObj.status = "unavailable"
         unAvailableBooks.push({id:bookObj.id,name:bookObj.name,price:bookObj.price,quantity:0,price:bookObj.price,status:bookObj.status})
     }
-    
-    console.log("Total Price Of All The Books Are $"+totalPrice);
 }
 function removeItemFromCart(removeId){
     cartObj = cartItems.find((ele)=>ele.id==removeId)
-    for(let n = 0 ; n < cartItems.length ; n++){
-        if(removeId == cartItems[n].id){
-            cartItems.pop(removeId)
-        }else{
-            console.log("You Are Entering Wrongng Id!!! Please Enter Correct Id !!!");
-        }
+    bookObj = bookStore.find((ele)=>ele.id==removeId)
+    bookObj.quantity += cartObj.quantity
+    cartItems=cartItems.filter((ele)=>ele.id!=removeId)
+    if(bookObj.quantity > 0){
+        bookObj.status = "available"
+        unAvailableBooks = unAvailableBooks.filter((ele)=>ele.id!=removeId)
     }
 }
 
-function updateItemInCart(){
+function updateItemInCart(updateId){
     cartObj = cartItems.find((ele)=>ele.id==updateId)
     bookObj = bookStore.find((ele)=>ele.id==updateId)
     updateQuantity = readline.questionInt("Enter The No Of Books You Want To Add Cart:")
@@ -131,7 +130,7 @@ function showCartItems(){
             break;   
         case 2:
             updateId = readline.questionInt("Enter The Id To Edit Details In Cart");
-            updateItemInCart()
+            updateItemInCart(updateId)
             break;
         default:
             break; 
@@ -149,14 +148,7 @@ while (choice!=4) {
             userId = readline.questionInt("Enter The Id Of Book You Want To Add Cart:")
             userQuantity = readline.questionInt("Enter The No Of Books You Want To Add Cart:")
             bookObj = bookStore.find((ele)=>ele.id==userId)
-            if(userQuantity > bookObj.quantity ){
-                console.log("we dont Have That Munch Of Quantity");
-                console.log("enter the Quantity In Between "+bookObj.quantity);
-                userQuantity = readline.questionInt("Enter The No Of Books You Want To Add Cart:")
-                addBookToCart(userId,userQuantity)
-            }else{
-                addBookToCart(userId,userQuantity)
-            }
+            addBookToCart(userId,userQuantity)
             break;
         case 3:
             showCartItems()
