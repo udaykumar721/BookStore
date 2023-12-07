@@ -23,7 +23,18 @@ let bookStore =[
         quantity:5
     }
 ]
+let unAvailableBooks =[]
 function displayBooks(){
+    if (unAvailableBooks.length != 0){
+        console.log(`\nUnavailable Books:
++------+--------------------+-------+----------+------------+
+| ID   |        Name        | Price | Quantity |   Status   |
++------+--------------------+-------+----------+------------+`);
+for(let i =0 ; i <unAvailableBooks.length ;i++){
+    console.log(`| ${unAvailableBooks[i].id}  |        ${unAvailableBooks[i].name}       |  $${unAvailableBooks[i].price}  |     ${unAvailableBooks[i].quantity}   |   ${unAvailableBooks[i].status}|`  );    
+}
+console.log(`+------+--------------------+-------+----------+------------+`);
+    }
     console.log(`\nAvailable Books:
 +------+--------------------+-------+----------+------------+
 | ID   |        Name        | Price | Quantity |   Status   |
@@ -73,6 +84,7 @@ function addBookToCart(userId,userQuantity){
         
     if(bookObj.quantity == 0){
         bookObj.status = "unavailable"
+        unAvailableBooks.push({id:bookObj.id,name:bookObj.name,price:bookObj.price,quantity:0,price:bookObj.price,status:bookObj.status})
     }
     
     console.log("Total Price Of All The Books Are $"+totalPrice);
